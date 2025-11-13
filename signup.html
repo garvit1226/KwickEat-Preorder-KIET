@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>KwickEat | Sign Up</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="ASSETS/Logo.jpg">
+</head>
+<body class="auth-body">
+  <header style="position: fixed; width: 97%; top: 0; left: 0; z-index: 1000;">
+    <h1>
+      <div class="logo"> 
+        <a href="index.html" class="site-name" style="color: white; text-decoration: none;">Kwick<span id="eat">Eat</span></a>
+      </div>
+    </h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="login.html">Login</a>
+      <a href="contact.html">Contact</a>
+      <a href="about1.html">About Us</a>
+    </nav>
+  </header>
+
+  <br><br><br><br>
+  <main class="auth-container">
+    <div class="auth-box">
+      <h2>Create Account 📝</h2>
+      <p class="subtitle">Sign up to start ordering!</p>
+      <form id="signupForm">
+        <input type="email" id="signupEmail" placeholder="Email address" required><br>
+        <input type="password" id="signupPassword" placeholder="Password" required><br>
+        <button type="submit" class="auth-btn">Sign Up</button>
+      </form>
+      <p class="alt">Already have an account? <a href="login.html">Login</a></p>
+    </div>
+  </main>
+
+  <footer>© 2025 KwickEat</footer>
+
+  <script>
+    document.getElementById("signupForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const email = document.getElementById("signupEmail").value;
+      const password = document.getElementById("signupPassword").value;
+
+      // save to localStorage
+      localStorage.setItem("kwickUserEmail", email);
+      localStorage.setItem("kwickUserPassword", password);
+
+      alert("Account created successfully! You can now log in.");
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Order Confirmation | KwickEat</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/x-icon" href="ASSETS/Logo.jpg">
+
+  <script>
+    window.onload = function () {
+      const params = new URLSearchParams(window.location.search);
+      const shop = params.get("shop");
+      const queue = params.get("queue");
+      const pin = params.get("pin");
+      let wait = parseInt(params.get("wait"));
+      const total = params.get("total");
+
+      // Convert minutes → seconds
+      let remainingTime = wait * 60;
+
+      // Fill in static details
+      document.getElementById("shopName").innerText = shop || "Unknown Shop";
+      document.getElementById("queueNum").innerText = queue || "—";
+      document.getElementById("pinNum").innerText = pin || "—";
+      document.getElementById("totalAmount").innerText = total ? `₹${total}` : "₹0.00";
+
+      // Display initial formatted time
+      updateTimerDisplay(remainingTime);
+
+      // Start countdown
+      const timer = setInterval(() => {
+        if (remainingTime > 0) {
+          remainingTime--;
+          updateTimerDisplay(remainingTime);
+        } else {
+          clearInterval(timer);
+          document.getElementById("waitTime").innerText = "Ready!";
+        }
+      }, 1000); // Update every second
+    };
+
+    // Helper function to format MM:SS
+    function updateTimerDisplay(secondsLeft) {
+      const mins = Math.floor(secondsLeft / 60);
+      const secs = secondsLeft % 60;
+      const formatted =
+        String(mins).padStart(2, "0") + ":" + String(secs).padStart(2, "0");
+      document.getElementById("waitTime").innerText = formatted;
+
+
+    }
+
+    
+  </script>
+     <link rel="icon" type="image/x-icon" href="ASSETS/Logo.jpg">
+</head>
+
+<body class="shop-page">
+  <header>
+    <h1 id="eat">✅ Order Confirmed!</h1>
+    <a href="/menu.html" class="back-btn">← Back to Menu</a>
+  </header>
+
+  <main class="menu-container">
+    <div class="confirmation-box">
+      <h2>🎉 Thank you for ordering from <span id="shopName"></span>!</h2>
+      <p><strong>Queue Number:</strong> <span id="queueNum"></span></p>
+      <p><strong>PIN:</strong> <span id="pinNum"></span></p>
+      <p><strong>Estimated Wait Time:</strong> <span id="waitTime">--:--</span></p>
+      <p><strong>Total Amount (incl. 5% tax):</strong> <span id="totalAmount"></span></p>
+      <p class="note">Please remember your PIN to collect your order safely.</p>
+    </div>
+  </main>
+</body>
+</html>

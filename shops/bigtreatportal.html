@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Big Treat | Shopkeeper Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* 🍽️ GLOBAL STYLES */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #fff3e6, #ffe5cc);
+      color: #333;
+      overflow-x: hidden;
+      transition: background 0.6s ease;
+    }
+
+    /* 🍛 HEADER */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(90deg, #d97706, #f59e0b);
+      color: #fff;
+      padding: 1.5rem 0;
+      box-shadow: 0 3px 15px rgba(0, 0, 0, 0.25);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      animation: slideDown 1s ease;
+    }
+
+    header img {
+      width: 60px;
+      height: 60px;
+      margin-right: 15px;
+      border-radius: 50%;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+      transition: transform 0.4s ease;
+    }
+
+    header img:hover {
+      transform: rotate(10deg) scale(1.1);
+    }
+
+    header h1 {
+      font-size: 1.9rem;
+      letter-spacing: 1px;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+    }
+
+    /* ✨ MAIN CARD */
+    main {
+      max-width: 950px;
+      margin: 3rem auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 25px;
+      padding: 2.5rem 3rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      backdrop-filter: blur(5px);
+      animation: fadeIn 1s ease-in-out;
+      transition: transform 0.3s ease;
+    }
+
+    main:hover {
+      transform: scale(1.01);
+    }
+
+    main h2 {
+      color: #d97706;
+      font-size: 1.9rem;
+      margin-bottom: 0.8rem;
+      text-shadow: 0 0 6px rgba(255, 180, 80, 0.3);
+    }
+
+    /* 🔁 REFRESH BUTTON */
+    .refresh-btn {
+      background: linear-gradient(90deg, #f59e0b, #d97706);
+      color: #fff;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      margin: 1.5rem 0;
+      transition: all 0.4s ease;
+      box-shadow: 0 6px 18px rgba(217, 119, 6, 0.35);
+    }
+
+    .refresh-btn:hover {
+      background: linear-gradient(90deg, #ffb02e, #e08710);
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 8px 22px rgba(217, 119, 6, 0.45);
+    }
+
+    /* 🧾 TABLE */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 1rem;
+      box-shadow: 0 0 15px rgba(255, 193, 94, 0.1);
+    }
+
+    th {
+      background: #fff8ef;
+      color: #b45309;
+      font-weight: 600;
+      padding: 14px;
+      border-bottom: 2px solid #ffd6a5;
+      letter-spacing: 0.5px;
+    }
+
+    td {
+      padding: 13px;
+      border-bottom: 1px solid #e6e6e6;
+      transition: all 0.3s ease;
+    }
+
+    tr {
+      transition: all 0.3s ease;
+    }
+
+    tr:hover {
+      background-color: #fffaf0;
+      transform: scale(1.01);
+    }
+
+    /* ⚙️ FOOTER */
+    footer {
+      text-align: center;
+      padding: 1.2rem;
+      color: #444;
+      background: #fff5e8;
+      font-size: 0.95rem;
+      margin-top: 3rem;
+      letter-spacing: 0.3px;
+      box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.05);
+      animation: fadeIn 1.2s ease-in-out;
+    }
+
+    /* 🎬 ANIMATIONS */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* 📱 RESPONSIVE DESIGN */
+    @media (max-width: 768px) {
+      main {
+        padding: 1.5rem;
+      }
+      header h1 {
+        font-size: 1.4rem;
+      }
+      .refresh-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <img src="https://i.imgur.com/qxYN4Sv.png" alt="Big Treat Logo">
+    <h1>Big Treat Shopkeeper Dashboard</h1>
+  </header>
+
+  <main>
+    <h2>Orders Received</h2>
+    <button class="refresh-btn" onclick="loadOrders()">🔄 Refresh Orders</button>
+
+    <table id="ordersTable">
+      <tr>
+        <th>Order ID</th>
+        <th>Customer</th>
+        <th>Items</th>
+        <th>Total</th>
+      </tr>
+    </table>
+  </main>
+
+  <footer>© 2025 Big Treat | Powered by KwickEat</footer>
+
+  <script>
+    function loadOrders() {
+      const orders = JSON.parse(localStorage.getItem('bigtreat_orders')) || [];
+      const table = document.getElementById('ordersTable');
+
+      table.innerHTML = `
+        <tr>
+          <th>Order ID</th>
+          <th>Customer</th>
+          <th>Items</th>
+          <th>Total</th>
+        </tr>`;
+
+      if (orders.length === 0) {
+        table.innerHTML += `<tr><td colspan="4">No orders yet 🍰</td></tr>`;
+        return;
+      }
+
+      orders.forEach(order => {
+        table.innerHTML += `
+          <tr>
+            <td>${order.id}</td>
+            <td>${order.customer}</td>
+            <td>${order.items.join(', ')}</td>
+            <td>₹${order.total}</td>
+          </tr>`;
+      });
+    }
+
+    // Auto-refresh every 10 seconds
+    setInterval(loadOrders, 10000);
+    loadOrders();
+  </script>
+</body>
+</html>

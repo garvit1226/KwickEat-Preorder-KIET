@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Green Chilli | KwickEat</title>
+  <link rel="icon" type="image/x-icon" href="ASSETS/Logo.jpg">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #121212;
+      color: #f2f2f2;
+    }
+
+    header {
+      background: #000;
+      color: darkorange;
+      text-align: center;
+      padding: 1.2rem 0;
+      box-shadow: 0 4px 12px rgba(255, 140, 0, 0.25);
+      position: relative;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2em;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .back-btn {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: white;
+      text-decoration: none;
+      font-size: 1em;
+      background: darkorange;
+      padding: 6px 14px;
+      border-radius: 10px;
+      transition: 0.3s;
+    }
+
+    .back-btn:hover {
+      background: #ff9b1f;
+      transform: translateY(-50%) scale(1.05);
+    }
+
+    main.menu-container {
+      max-width: 900px;
+      margin: 2rem auto;
+      background: #1a1a1a;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 0 20px rgba(255, 140, 0, 0.2);
+      transition: 0.3s;
+    }
+
+    table.menu-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    th, td {
+      padding: 14px;
+      border-bottom: 1px solid #333;
+    }
+
+    th {
+      background: #222;
+      color: darkorange;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.95em;
+      letter-spacing: 0.5px;
+    }
+
+    tr:hover {
+      background: rgba(255, 140, 0, 0.08);
+      transition: 0.3s;
+    }
+
+    .quantity-control {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .quantity-control button {
+      background: darkorange;
+      border: none;
+      color: white;
+      font-size: 1.1em;
+      border-radius: 8px;
+      padding: 5px 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .quantity-control button:hover {
+      background: #ff9b1f;
+      transform: scale(1.1);
+    }
+
+    .bill-box {
+      background: #111;
+      border-radius: 14px;
+      padding: 1.2rem;
+      margin-top: 1.2rem;
+      box-shadow: 0 0 15px rgba(255, 140, 0, 0.15);
+    }
+
+    .bill-box h3 {
+      margin-top: 0;
+      color: darkorange;
+      text-align: center;
+    }
+
+    .bill-box p, .bill-box h4 {
+      font-size: 1em;
+      text-align: center;
+      margin: 6px 0;
+    }
+
+    .bill-box h4 {
+      color: darkorange;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+
+    .order-btn {
+      display: block;
+      margin: 1.5rem auto;
+      background: darkorange;
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 14px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: 0.3s;
+      box-shadow: 0 4px 14px rgba(255, 140, 0, 0.25);
+    }
+
+    .order-btn:hover {
+      background: #ff9b1f;
+      transform: scale(1.05);
+      box-shadow: 0 6px 22px rgba(255, 140, 0, 0.3);
+    }
+  </style>
+
+  <script>
+    const items = [
+      { name: "Paneer Roll", price: 70 },
+      { name: "Egg Roll", price: 80 },
+      { name: "Veg Noodles", price: 100 },
+      { name: "Mix Fruit Juice", price: 50 },
+      { name: "Chocolate Shake", price: 90 }
+    ];
+
+    let quantities = Array(items.length).fill(0);
+    let total = 0;
+
+    function increaseQuantity(i) {
+      quantities[i]++;
+      updateTable();
+      updateBill();
+    }
+
+    function decreaseQuantity(i) {
+      if (quantities[i] > 0) {
+        quantities[i]--;
+        updateTable();
+        updateBill();
+      }
+    }
+
+    function updateTable() {
+      quantities.forEach((q, i) => document.getElementById(`qty-${i}`).innerText = q);
+    }
+
+    function updateBill() {
+      total = 0;
+      for (let i = 0; i < items.length; i++) total += items[i].price * quantities[i];
+      const tax = total * 0.05;
+      const final = total + tax;
+      document.getElementById("subtotal").innerText = total.toFixed(2);
+      document.getElementById("tax").innerText = tax.toFixed(2);
+      document.getElementById("final").innerText = final.toFixed(2);
+    }
+
+
+function placeOrder(shop) {
+  if (total === 0) return alert("🛒 Please add at least one item before confirming!");
+
+  const final = (total + total * 0.05).toFixed(2);
+  const wait = Math.floor(Math.random() * 15) + 5;
+  const pin = Math.floor(1000 + Math.random() * 9000); // ✅ Generate PIN here
+  const orderedItems = items
+    .map((item, i) => (quantities[i] > 0 ? `${item.name} x${quantities[i]}` : null))
+    .filter(Boolean);
+
+  // ✅ Save order (same pin) for shopkeeper
+  let orders = JSON.parse(localStorage.getItem("hungrynites_orders")) || [];
+  orders.push({
+    pin: pin,
+    id: "NCF" + Math.floor(Math.random() * 9000 + 1000),
+    customer: "Guest User",
+    items: orderedItems,
+    total: final,
+    status: "Pending"
+  });
+  localStorage.setItem("nescafe_orders", JSON.stringify(orders));
+
+  // ✅ Send the same PIN to payment page
+  const params = new URLSearchParams({
+    shop,
+    total: final,
+    wait,
+    pin,
+    items: JSON.stringify(orderedItems),
+  });
+    if (1) {
+    alert("🚫 This shop is closed right now!");
+  } else {
+      window.open("payment.html?" + params.toString(), "_blank");
+    alert("✅ The shop is open!");
+  }
+
+}
+
+</script>
+
+
+</head>
+
+<body class="shop-page">
+  <header>
+    <h1>Green Chilli Menu</h1>
+    <a href="/menu.html" class="back-btn">← Back</a>
+  </header>
+
+  <main class="menu-container">
+    <table class="menu-table">
+      <tr><th>Item</th><th>Price (₹)</th><th>Quantity</th></tr>
+      <tr><td>Paneer Roll</td><td>70</td><td><div class="quantity-control"><button onclick="decreaseQuantity(0)">−</button><span id="qty-0">0</span><button onclick="increaseQuantity(0)">+</button></div></td></tr>
+      <tr><td>Egg Roll</td><td>80</td><td><div class="quantity-control"><button onclick="decreaseQuantity(1)">−</button><span id="qty-1">0</span><button onclick="increaseQuantity(1)">+</button></div></td></tr>
+      <tr><td>Veg Noodles</td><td>100</td><td><div class="quantity-control"><button onclick="decreaseQuantity(2)">−</button><span id="qty-2">0</span><button onclick="increaseQuantity(2)">+</button></div></td></tr>
+      <tr><td>Mix Fruit Juice</td><td>50</td><td><div class="quantity-control"><button onclick="decreaseQuantity(3)">−</button><span id="qty-3">0</span><button onclick="increaseQuantity(3)">+</button></div></td></tr>
+      <tr><td>Chocolate Shake</td><td>90</td><td><div class="quantity-control"><button onclick="decreaseQuantity(4)">−</button><span id="qty-4">0</span><button onclick="increaseQuantity(4)">+</button></div></td></tr>
+    </table>
+
+    <div class="bill-box">
+      <h3>🧾 Bill Summary</h3>
+      <p>Subtotal: ₹<span id="subtotal">0.00</span></p>
+      <p>Tax (5%): ₹<span id="tax">0.00</span></p>
+      <h4>Total: ₹<span id="final">0.00</span></h4>
+    </div>
+
+    <button class="order-btn" onclick="placeOrder('Hungry Nites')">Confirm Order</button>
+  </main>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Payment | KwickEat</title>
+  <link rel="stylesheet" href="style.css">
+   <link rel="icon" type="image/x-icon" href="ASSETS/Logo.jpg">
+  <script>
+    // Load payment details
+    window.onload = function () {
+      const params = new URLSearchParams(window.location.search);
+      const shop = params.get("shop");
+      const total = params.get("total");
+      const wait = params.get("wait");
+
+      document.getElementById("shopName").innerText = shop || "Unknown Shop";
+      document.getElementById("amount").innerText = total ? `₹${total}` : "₹0.00";
+
+      document.getElementById("shopHidden").value = shop;
+      document.getElementById("totalHidden").value = total;
+      document.getElementById("waitHidden").value = wait;
+    };
+
+    // Proceed only if UTR ID entered
+function proceedToConfirmation() {
+ const utrInput = document.getElementById("utrInput").value.trim();
+ if (utrInput === "") {
+ alert("⚠️ Please enter your UTR ID after completing payment!");
+ return;
+ }
+
+ const shop = document.getElementById("shopHidden").value;
+  const total = document.getElementById("totalHidden").value;
+ const wait = document.getElementById("waitHidden").value;
+ const queueNum = Math.floor(Math.random() * 100) + 1;
+ const params = new URLSearchParams(window.location.search);
+ const pin = params.get("pin");
+
+ window.location.href = `order-confirmation.html?shop=${shop}&queue=${queueNum}&pin=${pin}&wait=${wait}&total=${total}`;
+}
+
+
+    
+  </script>
+</head>
+
+<body class="shop-page">
+  <header>
+    <h1 id="eat">Payment | <span id="shopName"></span></h1>
+    <a href="/menu.html" class="back-btn">← Back</a>
+  </header>
+
+  <main class="menu-container">
+    <div class="payment-box">
+      <!-- Total Payment -->
+      <p class="payment-amount">
+        <strong>Total Payable:</strong> <span id="amount"></span>
+      </p>
+
+      <!-- QR Scanner Image -->
+      <div class="qr-section">
+        <img src="/ASSETS/qr.jpg" alt="QR Scanner" class="qr-img">
+
+      </div>
+
+      <!-- UTR ID Input -->
+      <div class="utr-form">
+        <label for="utrInput"><strong>Enter UTR ID:</strong></label><br>
+        <input type="text" id="utrInput" placeholder="Enter your UTR ID here" required>
+      </div>
+
+      <!-- Hidden Inputs -->
+      <input type="hidden" id="shopHidden">
+      <input type="hidden" id="totalHidden">
+      <input type="hidden" id="waitHidden">
+
+      <!-- Place Order Button -->
+      <button class="order-btn" onclick="proceedToConfirmation()">Place Order</button>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Orders | KwickEat</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+ <link rel="icon" type="image/x-icon" href="ASSETS/Logo.jpg">
+
+  <script>
+    let activeOrders = [
+      { shop: "Nescafe", time: "12:30 PM", wait: 3, queue: "#14", pin: "KW-3927" },
+      { shop: "Hungry Nites", time: "6:15 PM", wait: 5, queue: "#5", pin: "KW-7541" }
+    ];
+    let completedOrders = [];
+
+    function renderOrders() {
+      const activeBody = document.getElementById("activeOrdersBody");
+      const pastBody = document.getElementById("pastOrdersBody");
+      activeBody.innerHTML = "";
+      pastBody.innerHTML = "";
+
+      activeOrders.forEach((order, index) => {
+        if (order.wait <= 0) return;
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${order.shop}</td>
+          <td>${order.time}</td>
+          <td><span id="wait-${index}">${order.wait}</span> min</td>
+          <td>${order.queue}</td>
+          <td>${order.pin}</td>
+        `;
+        row.onclick = () => showOrderDetails(order);
+        activeBody.appendChild(row);
+      });
+
+      completedOrders.forEach(order => {
+        const row = document.createElement("tr");
+        row.classList.add("completed-row");
+        row.innerHTML = `
+          <td>${order.shop}</td>
+          <td>${order.time}</td>
+          <td><span class="completed">Completed ✅</span></td>
+          <td>${order.queue}</td>
+          <td>${order.pin}</td>
+        `;
+        row.onclick = () => showOrderDetails(order);
+        pastBody.appendChild(row);
+      });
+    }
+
+    function startCountdown() {
+      const timer = setInterval(() => {
+        activeOrders.forEach((order, i) => {
+          if (order.wait > 0) {
+            order.wait--;
+            document.getElementById(`wait-${i}`).innerText = order.wait;
+          } else if (order.wait === 0) {
+            completedOrders.push(order);
+            order.wait = -1;
+          }
+        });
+
+        activeOrders = activeOrders.filter(o => o.wait > 0);
+        renderOrders();
+        if (activeOrders.length === 0) clearInterval(timer);
+      }, 60000);
+    }
+
+    function showOrderDetails(order) {
+      const popup = document.getElementById("orderPopup");
+      document.getElementById("popupShop").innerText = order.shop;
+      document.getElementById("popupQueue").innerText = order.queue;
+      document.getElementById("popupPin").innerText = order.pin;
+      document.getElementById("popupStatus").innerText =
+        order.wait <= 0 ? "✅ Completed" : `⏱ ${order.wait} min remaining`;
+
+      popup.style.display = "flex";
+    }
+
+    function closePopup() {
+      document.getElementById("orderPopup").style.display = "none";
+    }
+
+    window.onload = function() {
+      renderOrders();
+      startCountdown();
+    };
+  </script>
+
+  <style>
+    /* === PAGE THEME === */
+    body {
+      background-color: #1e1e1e; /* dark grey */
+      color: #f2f2f2;
+      font-family: "Poppins", sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #000;
+      color: white;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      color: darkorange;
+      font-weight: 600;
+    }
+
+    .back-btn {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      background: darkorange;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+
+    .back-btn:hover {
+      background: #ff8c00;
+      transform: scale(1.05);
+    }
+
+    /* === TABLE STYLES === */
+    table {
+      width: 90%;
+      border-collapse: collapse;
+      margin: 20px auto;
+      background: #111;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(255, 140, 0, 0.2);
+    }
+
+    th, td {
+      text-align: center;
+      padding: 14px;
+    }
+
+    th {
+      background: #222;
+      color: darkorange;
+      font-weight: 600;
+    }
+
+    td {
+      border-bottom: 1px solid #333;
+      color: #eee;
+    }
+
+    tr:hover {
+      background: rgba(255, 140, 0, 0.1);
+      cursor: pointer;
+    }
+
+    .completed {
+      color: #00ff66;
+      font-weight: 600;
+    }
+
+    .completed-row {
+      background: #0f2610;
+    }
+
+    h2 {
+      text-align: center;
+      color: white;
+      margin-top: 30px;
+    }
+
+    /* === POPUP === */
+    #orderPopup {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .popup-box {
+      background: #000;
+      color: white;
+      padding: 25px;
+      border-radius: 12px;
+      width: 320px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(255, 140, 0, 0.3);
+    }
+
+    .popup-box button {
+      margin-top: 15px;
+      background: darkorange;
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .popup-box button:hover {
+      background: #ff8c00;
+      transform: scale(1.05);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #aaa;
+      margin-top: 40px;
+    }
+  </style>
+   <link rel="icon" type="image/x-icon" href="ASSETS/Logo.jpg">
+</head>
+
+<body class="shop-page">
+  <header>
+    <h1>Your Orders</h1>
+    <a href="menu.html" id="back-btn">← Back</a>
+  </header>
+
+  <main class="menu-container">
+    <h2>Active Orders</h2>
+    <table>
+      <tr><th>Shop</th><th>Order Time</th><th>Waiting Time</th><th>Queue No.</th><th>PIN</th></tr>
+      <tbody id="activeOrdersBody"></tbody>
+    </table>
+
+    <h2>Past Orders</h2>
+    <table>
+      <tr><th>Shop</th><th>Order Time</th><th>Status</th><th>Queue No.</th><th>PIN</th></tr>
+      <tbody id="pastOrdersBody"></tbody>
+    </table>
+  </main>
+
+  <!-- Popup -->
+  <div id="orderPopup">
+    <div class="popup-box">
+      <h3>Order Details</h3>
+      <p><strong>Shop:</strong> <span id="popupShop"></span></p>
+      <p><strong>Queue No:</strong> <span id="popupQueue"></span></p>
+      <p><strong>PIN:</strong> <span id="popupPin"></span></p>
+      <p><strong>Status:</strong> <span id="popupStatus"></span></p>
+      <button onclick="closePopup()">Close</button>
+    </div>
+  </div>
+
+  <footer>© 2025 KwickEat</footer>
+</body>
+</html>
