@@ -33,6 +33,10 @@ Shopkeepers can:
 - 📱 *Responsive UI* – Works seamlessly on desktops and mobiles.
 
 ---
+## Preview
+https://692aad6db5a0aa99219ef300--jazzy-clafoutis-691fe6.netlify.app/
+
+---
 
 ## 🖥 Tech Stack  
 - *HTML5* – Structure and layout  
